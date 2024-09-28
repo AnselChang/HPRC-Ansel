@@ -18,6 +18,7 @@ std::map<SensorID, std::string> SENSOR_ID_STRING = {
     {SensorID::STRING_SENSOR_1, "STRING_SENSOR_1"},
 };
 
+// A non-templated wrapper class for the sensor
 class SensorBase {
 
 protected:

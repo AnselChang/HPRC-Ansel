@@ -24,6 +24,26 @@ public:
         return nullptr;  // Return nullptr if not found
     }
 
+    // Templated function to poll a specific type of sensor
+    template<typename T>
+    std::pair<T, long> pollSensor(SensorID id) {
+
+        // Get the sensor by ID
+        SensorBase* sensor = getSensor(id);
+        if (!sensor) {
+            throw std::runtime_error("Sensor not found.");
+        }
+
+        // Attempt to cast to the specific type of sensor
+        Sensor<T>* specificSensor = dynamic_cast<Sensor<T>*>(sensor);
+        if (!specificSensor) {
+            throw std::runtime_error("Requested sensor id " + SENSOR_ID_STRING[id] + " is not of type " + typeid(T).name());
+        }
+
+        // Poll the sensor
+        return specificSensor->poll();
+    }
+
     // Update all sensors
     void updateAll() {
         for (auto& pair : sensors) {
@@ -41,20 +61,6 @@ public:
                 std::cout << std::endl;
             }
         }
-    }
-
-    // Templated function to poll a specific type of sensor
-    template<typename T>
-    std::pair<T, long> pollSensor(SensorID id) {
-        auto it = sensors.find(id);
-        if (it != sensors.end()) {
-            // Attempt to cast to the specific type of sensor
-            Sensor<T>* specificSensor = dynamic_cast<Sensor<T>*>(it->second.get());
-            if (specificSensor) {
-                return specificSensor->poll();
-            }
-        }
-        throw std::runtime_error("Sensor not found or incorrect type.");
     }
 
     // Print information about all sensors
