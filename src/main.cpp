@@ -14,6 +14,7 @@ int main() {
     sensors.addSensor(std::make_unique<RandomIntSensor>(SensorID::RANDOM_INT_SENSOR_2, &time, 2));
     sensors.addSensor(std::make_unique<RandomStringSensor>(SensorID::STRING_SENSOR_1, &time, 1));
 
+    // Test a few cycles of what would be loop() in an embedded system
     for (int i = 0; i < 20; i++) {
         
         sensors.updateAll();
